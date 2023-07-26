@@ -1,0 +1,128 @@
+import com.flickr.buildSrc.Libs
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.flickr.app'
+    compileSdk buildConfig.compileSdk
+
+    defaultConfig {
+        applicationId "com.flickr.app"
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+        versionCode buildConfig.versionCode
+        versionName buildConfig.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.compilerVersion
+    }
+
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+}
+
+dependencies {
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.splashScreen
+    implementation "com.google.android.material:material:1.8.0"
+
+    // compose
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.AndroidX.Compose.uiPreview
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.activity
+    implementation Libs.AndroidX.Compose.material3
+    implementation Libs.AndroidX.Compose.materialIconsExtended
+    debugImplementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.foundationLayout
+    implementation Libs.AndroidX.Compose.animation
+    implementation Libs.AndroidX.Compose.navigation
+    implementation Libs.AndroidX.Compose.paging
+    implementation Libs.AndroidX.Compose.constraintLayout
+
+    // accompanist
+    implementation Libs.AndroidX.Compose.Accompanist.navigationAnimation
+    implementation Libs.AndroidX.Compose.Accompanist.navigationMaterial
+    implementation Libs.AndroidX.Compose.Accompanist.insets
+    implementation Libs.AndroidX.Compose.Accompanist.insetsUi
+
+    // landscapist
+    implementation Libs.AndroidX.Compose.Landscapist.glide
+
+    // coroutines
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.android
+
+    // lifecycle
+    implementation Libs.AndroidX.Lifecycle.runtime
+    implementation Libs.AndroidX.Lifecycle.livedata
+    implementation Libs.AndroidX.Lifecycle.viewmodel
+    implementation Libs.AndroidX.Lifecycle.viewModelCompose
+    implementation Libs.AndroidX.Lifecycle.common
+    implementation Libs.AndroidX.Lifecycle.process
+
+    // hilt
+    implementation Libs.AndroidX.Compose.Hilt.compose
+    implementation Libs.Hilt.library
+    kapt Libs.Hilt.compiler
+
+    // moshi
+    api Libs.Moshi.moshiKotlin
+    kapt Libs.Moshi.moshiKotlinCodegen
+    api Libs.Moshi.moshiAdapters
+
+    // retrofit
+    implementation Libs.Retrofit.retrofit
+    implementation Libs.Retrofit.gsonConverter
+    implementation Libs.Retrofit.moshiConverter
+
+    // test
+    testImplementation platform(Libs.Test.JUnit.bom)
+    testImplementation Libs.Test.JUnit.jupiterApi
+    testRuntimeOnly Libs.Test.JUnit.jupiterEngine
+    testImplementation Libs.Test.mockK
+    testImplementation Libs.Test.Coroutines.test
+    testImplementation Libs.Test.turbine
+}
