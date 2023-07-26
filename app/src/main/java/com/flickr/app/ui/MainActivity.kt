@@ -1,4 +1,4 @@
-package com.flickr.app
+package com.flickr.app.ui
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -9,9 +9,11 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.flickr.app.navigation.FlickrNavHost
 import com.flickr.app.ui.theme.FlickrAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
