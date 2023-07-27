@@ -1,6 +1,6 @@
-package com.flickr.app.api
+package com.flickr.data.services
 
-import com.flickr.app.model.PhotosResponse
+import com.flickr.data.model.PhotosResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,6 +12,7 @@ interface FlickrService {
     suspend fun getRecents(
         @Query("api_key") apiKey: String,
         @Query("format") format: String,
-        @Query("nojsoncallback") callback: Int
+        @Query("nojsoncallback") callback: Int,
+        @Query("extras") extras: String
     ): PhotosResponse
 }

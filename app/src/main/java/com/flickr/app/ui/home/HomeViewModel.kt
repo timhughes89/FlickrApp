@@ -1,10 +1,10 @@
 package com.flickr.app.ui.home
 
-
 import androidx.lifecycle.viewModelScope
 import com.flickr.app.common.BaseViewModel
-import com.flickr.app.api.FlickrService
-import com.flickr.app.model.Photo
+import com.flickr.domain.RepositoryResult
+import com.flickr.domain.entities.AppPhoto
+import com.flickr.domain.usecases.GetRecentPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,12 +13,12 @@ import javax.inject.Inject
 
 @Immutable
 data class HomeViewState(
-    val photos: List<Photo>? = null
+    val photos: List<AppPhoto>? = null
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val service: FlickrService
+    private val getRecentPhotosUseCase: GetRecentPhotosUseCase
 ) : BaseViewModel<HomeViewState>(HomeViewState()) {
 
     init {
@@ -27,14 +27,17 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchRecents() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = service.getRecents(
-                apiKey = "fde50a14c3fdefb33d4c2a3563764631",
-                format = "json",
-                callback = 1
-            )
+            val response = getRecentPhotosUseCase.invoke()
 
-            setState {
-                copy(photos = response.photos.photos)
+            when (response) {
+                is RepositoryResult.Success -> {
+                    setState {
+                        copy(photos = response.value)
+                    }
+                }
+                else -> {
+
+                }
             }
         }
     }

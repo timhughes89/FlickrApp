@@ -1,6 +1,8 @@
 package com.flickr.app.di
 
-import com.flickr.app.api.FlickrService
+import com.flickr.data.repositories.RecentRepository
+import com.flickr.data.services.FlickrService
+import com.flickr.domain.gateways.RecentsGateway
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,5 +23,13 @@ class AppModule {
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(FlickrService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideReduceGateway(
+        recentsRepository: RecentRepository
+    ) : RecentsGateway {
+        return recentsRepository
     }
 }

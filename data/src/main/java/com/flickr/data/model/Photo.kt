@@ -1,4 +1,4 @@
-package com.flickr.app.model
+package com.flickr.data.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -29,5 +29,6 @@ data class Photo(
     val title: String,
     val isPublic: Int?,
     val isFriend: Int?,
-    val isFamily: Int?
+    val isFamily: Int?,
+    val tags: String
 )

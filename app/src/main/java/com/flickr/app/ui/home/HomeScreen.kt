@@ -1,19 +1,20 @@
 package com.flickr.app.ui.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,15 +26,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.flickr.app.R
 import com.flickr.app.composables.InsetAwareCentredAlignedTopAppBar
-import com.flickr.app.model.Photo
 import com.flickr.app.ui.FlickrDesignTokens
+import com.flickr.domain.entities.AppPhoto
+import com.skydoves.landscapist.glide.GlideImage
 
+@ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(
@@ -69,14 +73,13 @@ fun HomeScreen(
             )
         }
     ) {
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxSize(),
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(FlickrDesignTokens.token1)
-        ) {
-            state.value.photos?.let {
-                items(it) { photo ->
-                    GridItem(photo = photo)
+        state.value.photos?.let { photos ->
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier.fillMaxSize(),
+                columns = StaggeredGridCells.Fixed(2),
+            ) {
+                items(photos.size) {
+                    GridItem(photo = photos[it])
                 }
             }
         }
@@ -87,21 +90,53 @@ fun HomeScreen(
 @Composable
 fun GridItem(
     modifier: Modifier = Modifier,
-    photo: Photo
+    photo: AppPhoto
 ) {
-    Column(
+    if (photo.tags.isNotBlank()) photo.tags.split(" ").toList()
+//    val image = "https://live.staticflickr.com/{server-id}/{id}_{secret}_{size-suffix}.jpg"
+    val image = "https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_w.jpg"
+
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(FlickrDesignTokens.token1)
-            .height(120.dp)
+            .wrapContentHeight()
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(FlickrDesignTokens.token1)
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            )
     ) {
-        Text(text = photo.owner)
+
+        GlideImage(
+            imageModel = image,
+            contentScale = ContentScale.Crop
+        )
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.BottomStart),
+            text = photo.tags
+        )
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(FlickrDesignTokens.token1),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(FlickrDesignTokens.token4)
+                    .background(Color.Black, CircleShape)
+                    .border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.onBackground.copy(0.4f),
+                        shape = CircleShape
+                    )
+            )
+
+            Text(text = photo.owner)
+        }
     }
 }
 
@@ -110,16 +145,14 @@ fun GridItem(
 @Composable
 fun GridItemPreview() {
     GridItem(
-        photo = Photo(
+        photo = AppPhoto(
             id = "",
             owner = "",
             secret = "",
             server = "",
             farm = 0,
             title = "Example",
-            isPublic = null,
-            isFriend = null,
-            isFamily = null
+            tags = "Nikon"
         )
     )
 }
