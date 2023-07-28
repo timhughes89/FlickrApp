@@ -1,8 +1,12 @@
 package com.flickr.app.di
 
 import com.flickr.data.repositories.RecentRepository
+import com.flickr.data.repositories.SearchRepository
+import com.flickr.data.repositories.UserRepository
 import com.flickr.data.services.FlickrService
-import com.flickr.domain.gateways.RecentsGateway
+import com.flickr.domain.gateways.ImagesGateway
+import com.flickr.domain.gateways.SearchGateway
+import com.flickr.domain.gateways.UserGateway
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +21,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideFlickrService() : FlickrService {
+    fun provideFlickrService(): FlickrService {
         return Retrofit.Builder()
             .baseUrl("https://www.flickr.com/services/")
             .addConverterFactory(MoshiConverterFactory.create())
@@ -27,9 +31,25 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideReduceGateway(
+    fun provideRecentsGateway(
         recentsRepository: RecentRepository
-    ) : RecentsGateway {
+    ): ImagesGateway {
         return recentsRepository
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserGateway(
+        userRepository: UserRepository
+    ): UserGateway {
+        return userRepository
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchGateway(
+        searchRepository: SearchRepository
+    ): SearchGateway {
+        return searchRepository
     }
 }

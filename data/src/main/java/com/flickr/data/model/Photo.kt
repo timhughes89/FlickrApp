@@ -30,5 +30,5 @@ data class Photo(
     val isPublic: Int?,
     val isFriend: Int?,
     val isFamily: Int?,
-    val tags: String
+    val tags: String?
 )

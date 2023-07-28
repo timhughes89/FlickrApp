@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.dp
 
 object FlickrDesignTokens {
 
+    val tokenHalf = 4.dp
     val token1 = 8.dp
     val token2 = 16.dp
     val token3 = 24.dp

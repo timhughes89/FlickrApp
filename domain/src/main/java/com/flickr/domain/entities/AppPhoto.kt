@@ -4,9 +4,8 @@ data class AppPhoto(
     val id: String,
     val owner: String,
     val secret: String,
-    val server: String,
-    val farm: Int,
+    val imageUrl: String,
     val title: String,
-    val tags: String
+    val tags: String?
 )
 

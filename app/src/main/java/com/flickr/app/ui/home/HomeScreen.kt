@@ -1,19 +1,24 @@
 package com.flickr.app.ui.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,15 +30,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.flickr.app.R
+import com.flickr.app.composables.CircularLoadingIndicator
 import com.flickr.app.composables.InsetAwareCentredAlignedTopAppBar
 import com.flickr.app.ui.FlickrDesignTokens
+import com.flickr.app.ui.theme.AppTypography
 import com.flickr.domain.entities.AppPhoto
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -42,7 +51,9 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onUserSelected: (String) -> Unit,
+    onImageSelected: (String) -> Unit
 ) {
     val state = viewModel.state.collectAsState()
 
@@ -67,19 +78,133 @@ fun HomeScreen(
                                 .size(FlickrDesignTokens.token1)
                         )
 
-                        Text(text = "Flickr")
+                        Text(text = stringResource(R.string.label_flickr))
                     }
                 }
             )
         }
     ) {
-        state.value.photos?.let { photos ->
-            LazyVerticalStaggeredGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = StaggeredGridCells.Fixed(2),
+
+        if (state.value.error != null) {
+
+        }
+        else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
-                items(photos.size) {
-                    GridItem(photo = photos[it])
+                state.value.photos?.let { photos ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentPadding = PaddingValues(FlickrDesignTokens.token1)
+                    ) {
+                        items(photos.size) {
+                            ListItem(
+                                photo = photos[it],
+                                onImageSelected = { imageId ->
+                                    onImageSelected(imageId)
+                                },
+                                onUserSelected = { user ->
+                                    onUserSelected(user)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        CircularLoadingIndicator(loading = state.value.loading)
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun ListItem(
+    modifier: Modifier = Modifier,
+    photo: AppPhoto,
+    onImageSelected: (String) -> Unit,
+    onUserSelected: (String) -> Unit
+) {
+    if (!photo.tags.isNullOrBlank()) photo.tags!!.split(" ").toList()
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(FlickrDesignTokens.token1)
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(FlickrDesignTokens.token1))
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(FlickrDesignTokens.token1)
+            )
+            .border(
+                border = BorderStroke(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
+                ),
+                shape = RoundedCornerShape(FlickrDesignTokens.token1)
+            )
+            .clickable {
+                onImageSelected(photo.id)
+            }
+    ) {
+        GlideImage(
+            imageModel = photo.imageUrl,
+            contentScale = ContentScale.Crop
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(FlickrDesignTokens.token2)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    // User image
+                    Box(
+                        modifier = Modifier
+                            .size(FlickrDesignTokens.token4)
+                            .background(Color.Black, CircleShape)
+                            .border(
+                                width = 2.dp,
+                                color = MaterialTheme.colorScheme.onBackground.copy(0.4f),
+                                shape = CircleShape
+                            )
+                            .clickable {
+                                onUserSelected(photo.owner)
+                            }
+                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .width(FlickrDesignTokens.token2)
+                    )
+
+                    Text(text = photo.owner)
+                }
+
+                if (!photo.tags.isNullOrEmpty()) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(FlickrDesignTokens.token1)
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = photo.tags!!,
+                        style = AppTypography.labelMedium
+                    )
                 }
             }
         }
@@ -87,72 +212,19 @@ fun HomeScreen(
 }
 
 @ExperimentalMaterial3Api
-@Composable
-fun GridItem(
-    modifier: Modifier = Modifier,
-    photo: AppPhoto
-) {
-    if (photo.tags.isNotBlank()) photo.tags.split(" ").toList()
-//    val image = "https://live.staticflickr.com/{server-id}/{id}_{secret}_{size-suffix}.jpg"
-    val image = "https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_w.jpg"
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(FlickrDesignTokens.token1)
-            .wrapContentHeight()
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(FlickrDesignTokens.token1)
-            )
-    ) {
-
-        GlideImage(
-            imageModel = image,
-            contentScale = ContentScale.Crop
-        )
-
-        Text(
-            modifier = Modifier
-                .align(Alignment.BottomStart),
-            text = photo.tags
-        )
-
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(FlickrDesignTokens.token1),
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(FlickrDesignTokens.token4)
-                    .background(Color.Black, CircleShape)
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(0.4f),
-                        shape = CircleShape
-                    )
-            )
-
-            Text(text = photo.owner)
-        }
-    }
-}
-
-@ExperimentalMaterial3Api
 @Preview
 @Composable
-fun GridItemPreview() {
-    GridItem(
+fun ListItemPreview() {
+    ListItem(
         photo = AppPhoto(
             id = "",
             owner = "",
             secret = "",
-            server = "",
-            farm = 0,
+            imageUrl = "",
             title = "Example",
             tags = "Nikon"
-        )
+        ),
+        onUserSelected = {},
+        onImageSelected = {}
     )
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.KeyboardBackspace
@@ -38,7 +39,6 @@ import com.flickr.app.ui.FlickrDesignTokens
 import com.flickr.app.ui.theme.AppTypography
 
 @Composable
-
 fun InsetAwareCentredAlignedTopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
@@ -46,7 +46,8 @@ fun InsetAwareCentredAlignedTopAppBar(
     actions: @Composable RowScope.() -> Unit = {},
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    backgroundColor: Color = MaterialTheme.colorScheme.background
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    divider: Boolean = true
 ) {
 
     Column(
@@ -64,10 +65,13 @@ fun InsetAwareCentredAlignedTopAppBar(
             colors = colors,
             scrollBehavior = scrollBehavior
         )
-        Divider(
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10F),
-            thickness = 1.dp
-        )
+
+        if (divider) {
+            Divider(
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10F),
+                thickness = 1.dp
+            )
+        }
     }
 }
 
@@ -152,7 +156,8 @@ internal fun TopAppBar(
             ) {
                 IconButton(
                     modifier = Modifier
-                        .padding(FlickrDesignTokens.token1),
+                        .padding(FlickrDesignTokens.token1)
+                        .background(Color.White, CircleShape),
                     onClick = onBackPressed
                 ) {
                     Icon(
