@@ -122,10 +122,10 @@ dependencies {
     implementation Libs.Retrofit.moshiConverter
 
     // test
-    testImplementation platform(Libs.Test.JUnit.bom)
-    testImplementation Libs.Test.JUnit.jupiterApi
-    testRuntimeOnly Libs.Test.JUnit.jupiterEngine
-    testImplementation Libs.Test.mockK
-    testImplementation Libs.Test.Coroutines.test
-    testImplementation Libs.Test.turbine
+    implementation platform(Libs.Test.JUnit.bom)
+    implementation Libs.Test.JUnit.jupiterApi
+    runtimeOnly Libs.Test.JUnit.jupiterEngine
+    implementation Libs.Test.mockK
+    implementation Libs.Test.Coroutines.test
+    implementation Libs.Test.turbine
 }
