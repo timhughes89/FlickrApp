@@ -10,4 +10,10 @@ sealed class ErrorType {
         override val title: String = "Generic error title"
         override val description: String = "Generic error description"
     }
+
+    object NetworkError: ErrorType() {
+        override val id: Int = 1
+        override val title: String = "Network error title"
+        override val description: String = "Network error description"
+    }
 }

@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.flickr.app.R
 import com.flickr.app.composables.CircularLoadingIndicator
 import com.flickr.app.composables.InsetAwareCentredAlignedTopAppBar
+import com.flickr.app.ui.ErrorScreen
 import com.flickr.app.ui.FlickrDesignTokens
 import com.flickr.app.ui.theme.AppTypography
 import com.flickr.domain.entities.AppPhoto
@@ -86,9 +87,13 @@ fun HomeScreen(
     ) {
 
         if (state.value.error != null) {
-
-        }
-        else {
+            ErrorScreen(
+                errorType = state.value.error!!,
+                onRetry = {
+                    viewModel.fetchImages()
+                }
+            )
+        } else {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -166,7 +171,10 @@ fun ListItem(
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            onUserSelected(photo.owner)
+                        },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
@@ -180,9 +188,6 @@ fun ListItem(
                                 color = MaterialTheme.colorScheme.onBackground.copy(0.4f),
                                 shape = CircleShape
                             )
-                            .clickable {
-                                onUserSelected(photo.owner)
-                            }
                     )
 
                     Spacer(

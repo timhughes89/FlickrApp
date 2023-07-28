@@ -24,8 +24,6 @@ class RecentRepository @Inject constructor(
         else SafeCallHelper.safeCall(Dispatchers.IO) {
             val recents = service.getRecents(
                 apiKey = "fde50a14c3fdefb33d4c2a3563764631",
-                format = "json",
-                callback = 1,
                 extras = "tags",
                 safeSearch = 1
             )
@@ -40,9 +38,7 @@ class RecentRepository @Inject constructor(
         return SafeCallHelper.safeCall(Dispatchers.IO) {
             val image = service.getPhotoInfo(
                 apiKey = "fde50a14c3fdefb33d4c2a3563764631",
-                photoId = imageId,
-                format = "json",
-                callback = 1,
+                photoId = imageId
             )
 
             image.photo.toAppImage()

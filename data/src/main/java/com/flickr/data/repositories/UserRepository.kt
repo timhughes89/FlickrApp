@@ -22,8 +22,6 @@ class UserRepository @Inject constructor(
             val request = flickrService.getUser(
                 apiKey = "fde50a14c3fdefb33d4c2a3563764631",
                 userId = userId,
-                format = "json",
-                callback = 1,
                 safeSearch = 1
             )
 
@@ -37,8 +35,6 @@ class UserRepository @Inject constructor(
             val request = flickrService.getUserPhotos(
                 apiKey = "fde50a14c3fdefb33d4c2a3563764631",
                 userId = userId,
-                format = "json",
-                callback = 1,
                 safeSearch = 1
             )
 

@@ -20,8 +20,6 @@ class SearchRepository @Inject constructor(
             val request = flickrService.getPhotoBySearch(
                 apiKey = "fde50a14c3fdefb33d4c2a3563764631",
                 searchTerm = searchTerm,
-                format = "json",
-                callback = 1,
                 safeSearch = 1
             )
 
