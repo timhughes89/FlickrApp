@@ -6,11 +6,12 @@ data class AppImage(
     val dateuploaded: String,
     val imageUrl: String,
     val title: String,
+    val description: String,
     val dates: AppPhotoDates,
     val views: String
 )
 
 data class AppPhotoDates(
     val posted: String,
-    val taken: String,
+    val taken: String
 )

@@ -41,7 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.flickr.app.R
 import com.flickr.app.composables.CircularLoadingIndicator
 import com.flickr.app.composables.InsetAwareCentredAlignedTopAppBar
-import com.flickr.app.ui.ErrorScreen
+import com.flickr.app.ui.error.ErrorScreen
 import com.flickr.app.ui.FlickrDesignTokens
 import com.flickr.app.ui.theme.AppTypography
 import com.flickr.domain.entities.AppPhoto
@@ -167,14 +167,14 @@ fun ListItem(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(FlickrDesignTokens.token2)
+                    .clickable {
+                        onUserSelected(photo.owner)
+                    }
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            onUserSelected(photo.owner)
-                        },
+                        .padding(FlickrDesignTokens.token2),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {

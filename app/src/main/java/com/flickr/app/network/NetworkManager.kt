@@ -1,10 +1,8 @@
-package com.flickr.app
+package com.flickr.app.network
 
-import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -14,7 +12,6 @@ import javax.inject.Singleton
 
 @Singleton
 class NetworkManager @Inject constructor(
-    @ApplicationContext context: Context,
     private val connectivityManager: ConnectivityManager
 ) {
 

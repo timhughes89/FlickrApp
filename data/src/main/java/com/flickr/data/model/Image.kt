@@ -17,6 +17,7 @@ data class Image(
     val farm: Int,
     val dateuploaded: String,
     val title: Title,
+    val description: Description,
     val dates: Dates,
     val views: String
 )

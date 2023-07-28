@@ -1,7 +1,7 @@
 package com.flickr.app.ui.home
 
 import androidx.lifecycle.viewModelScope
-import com.flickr.app.NetworkManager
+import com.flickr.app.network.NetworkManager
 import com.flickr.app.common.BaseViewModel
 import com.flickr.domain.RepositoryResult
 import com.flickr.domain.entities.AppPhoto
@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.Error
 import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
 
@@ -93,23 +92,6 @@ class HomeViewModel @Inject constructor(
                     else -> {
                         fetchImages()
                     }
-                }
-            }
-        }
-    }
-
-    suspend fun fetchItemsBySearch(searchTerm: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = getSearchUseCase.invoke(searchTerm)
-
-            when (response) {
-                is RepositoryResult.Success -> {
-                    setState {
-                        copy(photos = response.value)
-                    }
-                }
-                else -> {
-
                 }
             }
         }

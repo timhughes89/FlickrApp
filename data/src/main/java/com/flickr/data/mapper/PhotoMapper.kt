@@ -24,11 +24,12 @@ fun Image.toAppImage(): AppImage {
         secret = secret,
         dateuploaded = dateuploaded,
         title = title.content,
+        description = description.text,
         dates = AppPhotoDates(
             posted = dates.posted,
             taken = dates.taken
         ),
         imageUrl = ImageUtils.buildImageUrl(server, id, secret),
-        views = views,
+        views = views
     )
 }

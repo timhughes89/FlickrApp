@@ -75,48 +75,6 @@ fun InsetAwareCentredAlignedTopAppBar(
     }
 }
 
-@Composable
-internal fun TitleTopBar(
-    modifier: Modifier = Modifier,
-    contentColor: Color = MaterialTheme.colorScheme.onBackground,
-) {
-    Row(
-        modifier = Modifier
-            .wrapContentHeight()
-            .padding(horizontal = FlickrDesignTokens.token3, vertical = FlickrDesignTokens.token1)
-            .then(modifier),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f, true),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = "Reduce",
-                style = AppTypography.displaySmall,
-                color = contentColor
-            )
-            Text(
-                text = "Cut your emissions by shopping sustainably",
-                color = contentColor
-            )
-        }
-
-        IconButton(
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.FavoriteBorder,
-                tint = contentColor,
-                contentDescription = null
-            )
-        }
-    }
-}
-
 /**
  * A composable that creates the TopAppBar.
  * This is created outside of the scaffold as to be able to be shown on top of
@@ -129,6 +87,7 @@ internal fun TopAppBar(
     icon: ImageVector? = null,
     topBarState: MutableState<Boolean>,
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     onBackPressed: () -> Unit
 ) {
     Column(
@@ -157,7 +116,7 @@ internal fun TopAppBar(
                 IconButton(
                     modifier = Modifier
                         .padding(FlickrDesignTokens.token1)
-                        .background(Color.White, CircleShape),
+                        .background(backgroundColor, CircleShape),
                     onClick = onBackPressed
                 ) {
                     Icon(

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FlickrApp</string>
+
+    <string name="label_views">Views</string>
     <string name="label_description">Description</string>
     <string name="label_flickr">Flickr</string>
     <string name="label_photos">Photos</string>
@@ -7,4 +9,6 @@
 
     <string name="error_generic_title">Oops something has gone wrong</string>
     <string name="error_generic_description">Please try again later.</string>
+    <string name="label_date_taken">Date Taken</string>
+    <string name="label_date_uploaded">Date Uploaded</string>
 </resources>

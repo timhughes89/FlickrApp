@@ -44,14 +44,12 @@ class UserProfileViewModel @Inject constructor(
                         )
                     }
                 }
-
                 else -> {
-                    // Some error
+                    // Present some feeback to the user, possibly a snackbar.
                 }
             }
         }
     }
-
 
     private fun fetchUserPhotos(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -66,7 +64,7 @@ class UserProfileViewModel @Inject constructor(
                     }
                 }
                 else -> {
-                    // Some error
+                    // Present some feeback to the user, possibly a snackbar.
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.flickr.app.ui
+package com.flickr.app.ui.error
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.flickr.app.R
+import com.flickr.app.ui.FlickrDesignTokens
 import com.flickr.domain.entities.ErrorType
 
 @Composable
@@ -58,6 +59,7 @@ fun ErrorScreen(
               modifier = Modifier
                   .align(Alignment.Center),
               painter = painterResource(id = R.drawable.ic_error),
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = null
           )
       }
